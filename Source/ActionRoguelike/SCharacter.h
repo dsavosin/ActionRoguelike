@@ -29,14 +29,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void MoveForward(float value);
+	void MoveForward(float value);
 
-	virtual void MoveSideways(float value);
+	void MoveRight(float value);
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
