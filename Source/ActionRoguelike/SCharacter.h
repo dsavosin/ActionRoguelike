@@ -20,6 +20,9 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ProjectileClass;
+
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USpringArmComponent> SpringArgComponent;
 
@@ -33,9 +36,10 @@ protected:
 
 	void MoveRight(float value);
 
+	void PrimaryAttack();
+	
 public:	
 	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };
