@@ -51,6 +51,8 @@ void ASExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 	{
 		RadialForceComponent->FireImpulse();
 		Explode();
+		UE_LOG(LogTemp, Log, TEXT("ASExplosiveBarrel::OnActorHit"));
+		UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *GetNameSafe(OtherActor));
 	}
 }
 

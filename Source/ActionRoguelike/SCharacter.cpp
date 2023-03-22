@@ -4,12 +4,14 @@
 #include "SCharacter.h"
 
 #include "SInteractionComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
 // Sets default values
-ASCharacter::ASCharacter()
+ASCharacter::ASCharacter() :
+PrimaryAttackDelay(0.2f)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -17,6 +19,7 @@ ASCharacter::ASCharacter()
 	SpringArgComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	SpringArgComponent->bUsePawnControlRotation = true;
 	SpringArgComponent->SetupAttachment(RootComponent);
+	SpringArgComponent->SocketOffset = FVector(0.0f,100.f,100.f);
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArgComponent);
@@ -35,7 +38,7 @@ ASCharacter::ASCharacter()
 void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	//CrosshairWidget = CreateWidget(GetWorld(), CrosshairWidgetAsset);//->AddToViewport();
 }
 
 void ASCharacter::MoveForward(float value)
@@ -62,6 +65,18 @@ void ASCharacter::MoveRight(float value)
 	AddMovementInput(RightVector, value);
 }
 
+void ASCharacter::PrimaryAttack_Execution()
+{
+	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	
+	const FTransform SpawnTransform = FTransform(GetControlRotation(), HandLocation);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;
+	
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+}
+
 void ASCharacter::PrimaryAttack()
 {
 
@@ -71,13 +86,8 @@ void ASCharacter::PrimaryAttack()
 		return;
 	}
 
-	const FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-	
-	const FTransform SpawnTransform = FTransform(GetControlRotation(), HandLocation);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+	PlayAnimMontage(AttackAnimMontage);
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_Execution, PrimaryAttackDelay );
 }
 
 void ASCharacter::PrimaryInteract()

@@ -9,6 +9,8 @@
 class USpringArmComponent;
 class UCameraComponent;
 class USInteractionComponent;
+class UAnimMontage;
+class UUserWidget;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -32,7 +34,16 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USInteractionComponent> InteractionComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category="Attack")
+	TObjectPtr<UAnimMontage> AttackAnimMontage;
 	
+	UPROPERTY(EditDefaultsOnly, Category="Attack")
+	float PrimaryAttackDelay;
+
+	//UPROPERTY(EditDefaultsOnly, Category="Visuals")
+	//UUserWidget* CrosshairWidgetAsset = nullptr;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -40,10 +51,16 @@ protected:
 
 	void MoveRight(float value);
 
+	void PrimaryAttack_Execution();
+	
 	void PrimaryAttack();
 
 	void PrimaryInteract();
-	
+
+private:
+
+	FTimerHandle TimerHandle_PrimaryAttack;
+
 public:
 
 	// Called to bind functionality to input
