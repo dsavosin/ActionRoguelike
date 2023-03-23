@@ -6,11 +6,11 @@
 #include "GameFramework/Character.h"
 #include "SCharacter.generated.h"
 
+class USAttributeComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class USInteractionComponent;
 class UAnimMontage;
-class UUserWidget;
 
 UCLASS()
 class ACTIONROGUELIKE_API ASCharacter : public ACharacter
@@ -32,8 +32,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UCameraComponent> CameraComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
 	TObjectPtr<USInteractionComponent> InteractionComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<USAttributeComponent> AttributeComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category="Attack")
 	TObjectPtr<UAnimMontage> AttackAnimMontage;
@@ -41,8 +44,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category="Attack")
 	float PrimaryAttackDelay;
 
-	//UPROPERTY(EditDefaultsOnly, Category="Visuals")
-	//UUserWidget* CrosshairWidgetAsset = nullptr;
+	UPROPERTY(EditDefaultsOnly, Category="Visuals")
+	TSubclassOf<UUserWidget> CrosshairWidgetAsset;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

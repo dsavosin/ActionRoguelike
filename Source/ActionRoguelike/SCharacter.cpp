@@ -3,9 +3,10 @@
 
 #include "SCharacter.h"
 
+#include "SAttributeComponent.h"
 #include "SInteractionComponent.h"
-#include "Blueprint/UserWidget.h"
 #include "Camera/CameraComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
@@ -31,14 +32,19 @@ PrimaryAttackDelay(0.2f)
 	bUseControllerRotationRoll = false;
 
 	InteractionComponent = CreateDefaultSubobject<USInteractionComponent>(TEXT("InteractionComponent"));
-	
+	AttributeComponent = CreateDefaultSubobject<USAttributeComponent>(TEXT("AttributeComponent"));
 }
 
 // Called when the game starts or when spawned
 void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//CrosshairWidget = CreateWidget(GetWorld(), CrosshairWidgetAsset);//->AddToViewport();
+
+	//Create and add Crosshair UMG widget on screen.
+	if(ensureAlways(CrosshairWidgetAsset))
+	{
+		CreateWidget(GetLocalViewingPlayerController(), CrosshairWidgetAsset)->AddToViewport();
+	}
 }
 
 void ASCharacter::MoveForward(float value)
