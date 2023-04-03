@@ -3,6 +3,7 @@
 
 #include "SMagicProjectile.h"
 
+#include "SAttributeComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -41,6 +42,11 @@ void ASMagicProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 {
 	if(OtherActor && OtherActor != GetInstigator())
 	{
+		if(USAttributeComponent* AttrComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
+		{
+			AttrComp->ApplyHealthChange(-20.0f);
+		}
+		
 		Explode();
 	}
 }
