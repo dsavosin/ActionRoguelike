@@ -21,7 +21,7 @@ void USBTService_CheckAttackRange::TickNode(UBehaviorTreeComponent& OwnerComp, u
 		if(const APawn* AIPawn = OwnerComp.GetAIOwner()->GetPawn())
 		{
 			const float DistanceTo = FVector::Distance(TargetActor->GetActorLocation(), AIPawn->GetActorLocation());
-			const bool bWithinRange = DistanceTo < 2000.0f;
+			const bool bWithinRange = DistanceTo < 1000.0f;
 
 			bool bHasLOS = false;
 			if(bWithinRange)
