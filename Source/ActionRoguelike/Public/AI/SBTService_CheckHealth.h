@@ -3,30 +3,36 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActionRoguelike/SAttributeComponent.h"
 #include "BehaviorTree/BTService.h"
-#include "SBTService_CheckAttackRange.generated.h"
+#include "SBTService_CheckHealth.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ACTIONROGUELIKE_API USBTService_CheckAttackRange : public UBTService
+class ACTIONROGUELIKE_API USBTService_CheckHealth : public UBTService
 {
 	GENERATED_BODY()
+
+public:
+
+	USBTService_CheckHealth();
 
 protected:
 
 	UPROPERTY(EditAnywhere, Category = "AI")
-	FBlackboardKeySelector AttackRangeKey;
-
-	/* Max desired attack range of AI pawn */
-	UPROPERTY(EditAnywhere, Category = "AI")
-	float MaxAttackRange;
+	FBlackboardKeySelector LowHealthKey;
 	
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float LowHealthThreshold;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	float RestoredHealthThreshold;
+
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
-public:
+private:
 
-	USBTService_CheckAttackRange();
-	
+	FString LastStatus;
 };

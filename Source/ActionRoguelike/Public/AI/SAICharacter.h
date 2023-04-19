@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "SAICharacter.generated.h"
 
+class UPawnSensingComponent;
+class USAttributeComponent;
+
 UCLASS()
 class ACTIONROGUELIKE_API ASAICharacter : public ACharacter
 {
@@ -16,17 +19,23 @@ public:
 	ASAICharacter();
 
 protected:
+
+	UPROPERTY(VisibleAnywhere, Category="Components")
+	TObjectPtr<UPawnSensingComponent> PawnSensingComponent;
+	
+	UPROPERTY(VisibleAnywhere, Category="Components")
+	TObjectPtr<USAttributeComponent> AttributeComponent;
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	
+	virtual void PostInitializeComponents() override;
+	
+	UFUNCTION()
+	void OnPawnSeen(APawn* Pawn);
+	
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
 	UPROPERTY(EditDefaultsOnly, Category="Attack")
 	TSubclassOf<AActor> ProjectileActor;
-
 };

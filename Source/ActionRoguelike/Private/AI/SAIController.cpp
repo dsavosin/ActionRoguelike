@@ -12,9 +12,9 @@ void ASAIController::BeginPlay()
 	check(BehaviorTree != nullptr);
 	RunBehaviorTree(BehaviorTree);
 
-	if(APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0))
-	{
-		GetBlackboardComponent()->SetValueAsVector("MoveToLocation", PlayerPawn->GetActorLocation());
-		GetBlackboardComponent()->SetValueAsObject("TargetActor", PlayerPawn);
-	}
+	//if(APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0))
+	//{
+	//	GetBlackboardComponent()->SetValueAsVector("MoveToLocation", PlayerPawn->GetActorLocation());
+	//	GetBlackboardComponent()->SetValueAsObject("TargetActor", PlayerPawn);
+	//}
 }
