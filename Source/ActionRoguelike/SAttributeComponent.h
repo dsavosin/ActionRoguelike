@@ -33,4 +33,7 @@ public:
 
 	UFUNCTION(BlueprintCallable,  Category="Attributes")
 	float GetHealth() const { return Health; }
-};
+
+	UFUNCTION(BlueprintCallable, Category="Attributes")
+	bool IsAlive() const { return Health > 0.0f ? true : false; }
+}; 

@@ -13,6 +13,8 @@ ASAICharacter::ASAICharacter()
 {
 	AttributeComponent = CreateDefaultSubobject<USAttributeComponent>("AttributeComponent");
 	PawnSensingComponent = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensing");
+
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
