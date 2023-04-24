@@ -32,7 +32,7 @@ void USBTService_CheckHealth::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	if(const USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(AIPawn->GetComponentByClass(USAttributeComponent::StaticClass())))
 	{
 		const float CurrentHealth = AttributeComp->GetHealth();
-		if(CurrentHealth < LowHealthThreshold)
+		if(CurrentHealth < LowHealthThreshold && AttributeComp->IsAlive())
 		{
 			BlackboardComp->SetValueAsBool(LowHealthKey.SelectedKeyName, true);
 		}

@@ -3,6 +3,7 @@
 
 #include "AI/SAICharacter.h"
 
+#include "BrainComponent.h"
 #include "ActionRoguelike/SAttributeComponent.h"
 #include "AI/SAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -23,6 +24,25 @@ void ASAICharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
+{
+	if(NewHealth <= 0.0f)
+	{
+		// Stop BT
+		if(TObjectPtr<ASAIController> AIController = Cast<ASAIController>(GetController()))
+		{
+			AIController->GetBrainComponent()->StopLogic("Killed");
+		}
+		
+		// Ragdoll
+		GetMesh()->SetAllBodiesSimulatePhysics(true);
+		GetMesh()->SetCollisionProfileName("Ragdoll");
+		
+		// Set Lifespan
+		SetLifeSpan(10.0f);
+	}
+}
+
 void ASAICharacter::OnPawnSeen(APawn* Pawn)
 {
 	ASAIController* AIController = Cast<ASAIController>(GetController());
@@ -39,6 +59,7 @@ void ASAICharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	PawnSensingComponent->OnSeePawn.AddDynamic(this, &ASAICharacter::OnPawnSeen);
+	AttributeComponent->OnHealthChanged.AddDynamic(this, &ASAICharacter::OnHealthChanged);
 }
 
 

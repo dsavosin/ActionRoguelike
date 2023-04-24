@@ -43,8 +43,10 @@ protected:
 	
 	FTimerHandle TimerHandle_SpawnBots;
 	
-	UFUNCTION()
-	void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
+	//UFUNCTION()
+	void OnQueryCompleted(TSharedPtr<FEnvQueryResult> Result);
+	//void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
+	
 	
 	void SpawnBotTimerElapsed();
 };

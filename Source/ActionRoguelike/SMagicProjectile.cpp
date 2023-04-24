@@ -29,6 +29,7 @@ ASMagicProjectile::ASMagicProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bInitialVelocityInLocalSpace = true;
 
+	Damage = 20.0f;
 	InitialLifeSpan = 10.0f;
 }
 
@@ -44,7 +45,7 @@ void ASMagicProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* Ot
 	{
 		if(USAttributeComponent* AttrComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 		{
-			AttrComp->ApplyHealthChange(-20.0f);
+			AttrComp->ApplyHealthChange(-Damage);
 		}
 		
 		Explode();

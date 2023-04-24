@@ -48,6 +48,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Effects|Shake")
 	float ImpactShakeOuterRadius;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	float Damage;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
