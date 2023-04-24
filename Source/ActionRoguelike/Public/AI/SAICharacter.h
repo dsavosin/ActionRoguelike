@@ -33,6 +33,9 @@ protected:
 	void OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta);
 	
 	virtual void PostInitializeComponents() override;
+
+	UFUNCTION()
+	void SetTargetActor(AActor* NewTarget) const;
 	
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);

@@ -36,7 +36,7 @@ void USBTTask_Heal::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	
 	if(USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(AIPawn->GetComponentByClass(USAttributeComponent::StaticClass())))
 	{
-		if(AttributeComp->ApplyHealthChange(20.0f))
+		if(AttributeComp->ApplyHealthChange(nullptr, 20.0f))
 		{
 			SetNextTickTime(NodeMemory, 0.5);
 		}

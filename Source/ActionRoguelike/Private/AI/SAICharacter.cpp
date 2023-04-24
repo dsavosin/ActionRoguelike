@@ -26,40 +26,52 @@ void ASAICharacter::BeginPlay()
 
 void ASAICharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
-	if(NewHealth <= 0.0f)
+	if(Delta < 0.0f)
 	{
-		// Stop BT
-		if(TObjectPtr<ASAIController> AIController = Cast<ASAIController>(GetController()))
+		if(InstigatorActor != this)
 		{
-			AIController->GetBrainComponent()->StopLogic("Killed");
+			// Set Target Actor to Instigator
+			SetTargetActor(InstigatorActor);
 		}
 		
-		// Ragdoll
-		GetMesh()->SetAllBodiesSimulatePhysics(true);
-		GetMesh()->SetCollisionProfileName("Ragdoll");
+		if(NewHealth <= 0.0f)
+		{
+			// Stop BT
+			if(TObjectPtr<ASAIController> AIController = Cast<ASAIController>(GetController()))
+			{
+				AIController->GetBrainComponent()->StopLogic("Killed");
+			}
 		
-		// Set Lifespan
-		SetLifeSpan(10.0f);
+			// Ragdoll
+			GetMesh()->SetAllBodiesSimulatePhysics(true);
+			GetMesh()->SetCollisionProfileName("Ragdoll");
+		
+			// Set Lifespan
+			SetLifeSpan(10.0f);
+		}
 	}
 }
 
 void ASAICharacter::OnPawnSeen(APawn* Pawn)
 {
-	ASAIController* AIController = Cast<ASAIController>(GetController());
-	if(AIController)
-	{
-		AIController->GetBlackboardComponent()->SetValueAsObject("TargetActor", Pawn);
-
-		DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 4.0f, true);
-	}
+	SetTargetActor(Pawn);
+	DrawDebugString(GetWorld(), GetActorLocation(), "PLAYER SPOTTED", nullptr, FColor::White, 4.0f, true);
 }
 
-void ASAICharacter::PostInitializeComponents()
+void ASAICharacter::PostInitializeComponents() 
 {
 	Super::PostInitializeComponents();
 
 	PawnSensingComponent->OnSeePawn.AddDynamic(this, &ASAICharacter::OnPawnSeen);
 	AttributeComponent->OnHealthChanged.AddDynamic(this, &ASAICharacter::OnHealthChanged);
+}
+
+void ASAICharacter::SetTargetActor(AActor* NewTarget) const
+{
+	if(const TObjectPtr<ASAIController> AIController = Cast<ASAIController>(GetController()))
+	{
+		AIController->GetBlackboardComponent()->SetValueAsObject("TargetActor", NewTarget);
+	}
 }
 
 

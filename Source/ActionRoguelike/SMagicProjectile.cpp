@@ -25,7 +25,7 @@ ASMagicProjectile::ASMagicProjectile()
 	ParticleSystem->SetupAttachment(SphereComponent);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComponent");
-	ProjectileMovement->InitialSpeed = 1000.0f;
+	ProjectileMovement->InitialSpeed = 3000.0f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bInitialVelocityInLocalSpace = true;
 
@@ -41,11 +41,17 @@ void ASMagicProjectile::BeginPlay()
 
 void ASMagicProjectile::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	if(OtherActor == GetInstigator())
+	{
+		Destroy();
+		return;
+	}
+	
 	if(OtherActor && OtherActor != GetInstigator())
 	{
 		if(USAttributeComponent* AttrComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass())))
 		{
-			AttrComp->ApplyHealthChange(-Damage);
+			AttrComp->ApplyHealthChange(GetInstigator(), -Damage);
 		}
 		
 		Explode();
